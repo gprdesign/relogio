@@ -22,10 +22,24 @@
     letter-spacing: 4px;
     line-height: 1;
   }
+  .progress-wrap {
+    width: clamp(200px, 50vw, 500px);
+    height: 4px;
+    background: #222;
+    border-radius: 2px;
+    margin: 20px 0 14px;
+    overflow: hidden;
+  }
+  #barra {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #444, #fff);
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
   #data {
     font-size: clamp(1rem, 4vw, 2rem);
     color: #888;
-    margin-top: 16px;
     letter-spacing: 2px;
     text-transform: uppercase;
   }
@@ -33,6 +47,9 @@
 </head>
 <body>
   <div id="hora">00:00</div>
+  <div class="progress-wrap">
+    <div id="barra"></div>
+  </div>
   <div id="data">--</div>
   <script>
     const dias = ["Domingo","Segunda","Terca","Quarta","Quinta","Sexta","Sabado"];
@@ -41,9 +58,12 @@
       const now = new Date();
       const h = String(now.getHours()).padStart(2,"0");
       const m = String(now.getMinutes()).padStart(2,"0");
+      const s = now.getSeconds();
       document.getElementById("hora").textContent = h + ":" + m;
       document.getElementById("data").textContent =
         dias[now.getDay()] + ", " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
+      const pct = ((s) / 60) * 100;
+      document.getElementById("barra").style.width = pct + "%";
     }
     atualizar();
     setInterval(atualizar, 1000);
