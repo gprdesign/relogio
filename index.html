@@ -92,6 +92,8 @@
 
   .jogo-left {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -106,6 +108,9 @@
     color: #aaa;
     letter-spacing: 1.5px;
     text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .jogo-times {
@@ -117,6 +122,8 @@
     align-items: center;
     gap: 6px;
     line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .jogo-vs {
@@ -132,6 +139,7 @@
     color: #aaa;
     letter-spacing: 0.3px;
     line-height: 1.6;
+    overflow: hidden;
   }
 
   /* ── COUNTDOWN — coluna direita verde Brasil ── */
