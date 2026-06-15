@@ -6,37 +6,55 @@
 <title>Relógio</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
+  html, body {
+    width: 100%;
+    height: 100%;
     background: #0d0d0d;
-    font-family: "Press Start 2P", monospace;
-    color: #fff;
-    height: 100dvh;
-    display: grid;
-    grid-template-rows: 1fr 1px 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
 
-  /* ══ METADE DE CIMA: relógio ══ */
+  #card {
+    width: 400px;
+    height: 226px;
+    min-width: 400px;
+    min-height: 226px;
+    max-width: 400px;
+    max-height: 226px;
+    background: #0d0d0d;
+    font-family: "Press Start 2P", monospace;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── TOP: relógio ── */
   .top {
+    flex: 0 0 112px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0;
-    padding: 0 24px;
+    padding: 0 16px;
   }
+
   #hora {
-    font-size: clamp(4rem, 18vw, 9rem);
-    letter-spacing: 6px;
+    font-size: 3.8rem;
+    letter-spacing: 4px;
     line-height: 1;
   }
+
   .progress-wrap {
-    width: min(80vw, 520px);
-    height: 6px;
+    width: 300px;
+    height: 4px;
     background: #1c1c1c;
-    margin: 20px 0 14px;
+    margin: 10px 0 8px;
     overflow: hidden;
   }
   #barra {
@@ -45,86 +63,86 @@
     background: linear-gradient(90deg, #2a2a2a, #fff);
     transition: width 1s linear;
   }
+
   #data {
-    font-size: clamp(0.5rem, 2vw, 0.8rem);
+    font-size: 0.42rem;
     color: #888;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
   }
 
-  /* divisor */
-  .divider { background: #1c1c1c; }
+  /* ── DIVISOR ── */
+  .divider {
+    flex: 0 0 1px;
+    background: #1c1c1c;
+  }
 
-  /* ══ METADE DE BAIXO: jogo (largura total) ══ */
+  /* ── BOTTOM: jogo ── */
   .bottom {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    overflow: hidden;
-  }
-
-  /* card jogo ocupa 100% */
-  .jogo-card {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(10px, 2.5vh, 22px);
-    padding: clamp(16px, 4vw, 36px);
+    padding: 8px 16px 10px;
+    gap: 5px;
   }
+
   .jogo-label {
-    font-size: clamp(0.4rem, 1.4vw, 0.65rem);
+    font-size: 0.35rem;
     color: #888;
-    letter-spacing: 3px;
-  }
-  .jogo-times {
-    font-size: clamp(1rem, 4vw, 1.8rem);
     letter-spacing: 2px;
+  }
+
+  .jogo-times {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 6px;
   }
+
   .jogo-vs {
-    font-size: 0.5em;
+    font-size: 0.45em;
     color: #888;
   }
+
   .jogo-info {
-    font-size: clamp(0.4rem, 1.3vw, 0.6rem);
+    font-size: 0.32rem;
     color: #888;
-    letter-spacing: 2px;
-    line-height: 2.2;
+    letter-spacing: 1.5px;
+    line-height: 1.9;
   }
+
   .countdown {
-    font-size: clamp(0.85rem, 3.5vw, 1.5rem);
+    font-size: 0.7rem;
     color: #1eff6a;
-    letter-spacing: 3px;
-    line-height: 1.6;
+    letter-spacing: 2px;
   }
 </style>
 </head>
 <body>
+  <div id="card">
 
-  <div class="top">
-    <div id="hora">00:00</div>
-    <div class="progress-wrap"><div id="barra"></div></div>
-    <div id="data">--</div>
-  </div>
+    <div class="top">
+      <div id="hora">00:00</div>
+      <div class="progress-wrap"><div id="barra"></div></div>
+      <div id="data">--</div>
+    </div>
 
-  <div class="divider"></div>
+    <div class="divider"></div>
 
-  <div class="bottom">
-    <div class="jogo-card">
+    <div class="bottom">
       <div class="jogo-label">🇧🇷 PRÓXIMO JOGO</div>
       <div class="jogo-times">🇧🇷 BRA <span class="jogo-vs">VS</span> 🇭🇹 HAI</div>
-      <div class="jogo-info">SEX 19/06/2026<br>21H30 BRASÍLIA<br>FILADELFIA</div>
+      <div class="jogo-info">SEX 19/06/2026 &nbsp;·&nbsp; 21H30 BRASÍLIA &nbsp;·&nbsp; FILADELFIA</div>
       <div class="countdown" id="countdown">--</div>
     </div>
+
   </div>
 
   <script>
     const DIAS  = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
     const MESES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
-    const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC do dia 20
+    const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC dia 20
 
     const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -132,12 +150,10 @@
       hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
     });
 
-    function pad(n){ return String(n).padStart(2,"0"); }
+    function pad(n) { return String(n).padStart(2, "0"); }
 
     function tick() {
       const now = new Date();
-
-      // Extrair partes no fuso BRT
       const partes = Object.fromEntries(
         fmtPartes.formatToParts(now).map(p => [p.type, p.value])
       );
@@ -148,8 +164,7 @@
       const mes = parseInt(partes.month, 10) - 1;
       const ano = parseInt(partes.year, 10);
 
-      // Dia da semana: reconstruir em UTC puro para getUTCDay()
-      const dtBRT = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
+      const dtBRT    = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
       const diaSemana = DIAS[dtBRT.getUTCDay()];
 
       document.getElementById("hora").textContent = h + ":" + m;
@@ -157,7 +172,6 @@
         diaSemana + "  " + pad(dia) + " " + MESES[mes] + " " + ano;
       document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
 
-      // Countdown
       const diff = JOGO - now;
       if (diff <= 0) {
         document.getElementById("countdown").textContent = "🔴 AO VIVO!";
@@ -165,10 +179,10 @@
       }
       const dd = Math.floor(diff / 86400000);
       const hh = Math.floor((diff % 86400000) / 3600000);
-      const mm = Math.floor((diff % 3600000) / 60000);
-      const ss = Math.floor((diff % 60000) / 1000);
+      const mm = Math.floor((diff % 3600000)  / 60000);
+      const ss = Math.floor((diff % 60000)    / 1000);
       document.getElementById("countdown").textContent =
-        pad(dd) + "D " + pad(hh) + "H " + pad(mm) + "M " + pad(ss) + "S";
+        pad(dd) + "D  " + pad(hh) + "H  " + pad(mm) + "M  " + pad(ss) + "S";
     }
 
     tick();
