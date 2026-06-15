@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relógio</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,7 +28,6 @@
     max-width: 400px;
     max-height: 226px;
     background: #0d0d0d;
-    font-family: "Press Start 2P", monospace;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -37,24 +36,24 @@
 
   /* ── TOP: relógio ── */
   .top {
-    flex: 0 0 112px;
+    flex: 0 0 118px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
     padding: 0 16px;
   }
 
   #hora {
-    font-size: 3.8rem;
+    font-family: "Press Start 2P", monospace;
+    font-size: 3.2rem;
     letter-spacing: 4px;
     line-height: 1;
   }
 
   .progress-wrap {
-    width: 300px;
-    height: 4px;
+    width: 320px;
+    height: 3px;
     background: #1c1c1c;
     margin: 10px 0 8px;
     overflow: hidden;
@@ -67,9 +66,12 @@
   }
 
   #data {
-    font-size: 0.42rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
     color: #888;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
   }
 
   /* ── DIVISOR ── */
@@ -82,42 +84,70 @@
   .bottom {
     flex: 1;
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 16px;
+    gap: 14px;
+  }
+
+  /* coluna esquerda: label + times + info */
+  .jogo-left {
+    flex: 1;
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 8px 16px 10px;
-    gap: 5px;
+    gap: 4px;
   }
 
   .jogo-label {
-    font-size: 0.35rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
     color: #888;
     letter-spacing: 2px;
+    text-transform: uppercase;
   }
 
   .jogo-times {
-    font-size: 0.9rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 26px;
+    font-weight: 700;
     letter-spacing: 1px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    line-height: 1;
   }
 
   .jogo-vs {
-    font-size: 0.45em;
+    font-size: 14px;
+    font-weight: 400;
     color: #888;
   }
 
   .jogo-info {
-    font-size: 0.32rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
     color: #888;
-    letter-spacing: 1.5px;
-    line-height: 1.9;
+    letter-spacing: 1px;
+    line-height: 1.6;
+  }
+
+  /* coluna direita: countdown */
+  .jogo-right {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .countdown {
-    font-size: 0.7rem;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.62rem;
     color: #1eff6a;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+    text-align: center;
   }
 </style>
 </head>
@@ -133,17 +163,21 @@
     <div class="divider"></div>
 
     <div class="bottom">
-      <div class="jogo-label">🇧🇷 PRÓXIMO JOGO</div>
-      <div class="jogo-times">🇧🇷 BRA <span class="jogo-vs">VS</span> 🇭🇹 HAI</div>
-      <div class="jogo-info">SEX 19/06/2026 &nbsp;·&nbsp; 21H30 BRASÍLIA &nbsp;·&nbsp; FILADELFIA</div>
-      <div class="countdown" id="countdown">--</div>
+      <div class="jogo-left">
+        <div class="jogo-label">🇧🇷 Próximo Jogo</div>
+        <div class="jogo-times">🇧🇷 BRA <span class="jogo-vs">vs</span> 🇭🇹 HAI</div>
+        <div class="jogo-info">Sex 19/06/2026 · 21h30 Brasília · Filadélfia</div>
+      </div>
+      <div class="jogo-right">
+        <div class="countdown" id="countdown">--</div>
+      </div>
     </div>
 
   </div>
 
   <script>
-    const DIAS  = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
-    const MESES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+    const DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+    const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
     const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC dia 20
 
     const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
@@ -166,7 +200,7 @@
       const mes = parseInt(partes.month, 10) - 1;
       const ano = parseInt(partes.year, 10);
 
-      const dtBRT    = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
+      const dtBRT     = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
       const diaSemana = DIAS[dtBRT.getUTCDay()];
 
       document.getElementById("hora").textContent = h + ":" + m;
@@ -184,7 +218,7 @@
       const mm = Math.floor((diff % 3600000)  / 60000);
       const ss = Math.floor((diff % 60000)    / 1000);
       document.getElementById("countdown").textContent =
-        pad(dd) + "D  " + pad(hh) + "H  " + pad(mm) + "M  " + pad(ss) + "S";
+        pad(dd) + "D\n" + pad(hh) + "H  " + pad(mm) + "M\n" + pad(ss) + "S";
     }
 
     tick();
