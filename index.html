@@ -13,81 +13,180 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100dvh;
+    min-height: 100dvh;
     font-family: "Press Start 2P", monospace;
     color: #fff;
-    position: relative;
-    overflow: hidden;
+    gap: 0;
   }
-  #gio {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 85vh;
-    max-height: 600px;
-    opacity: 0.18;
-    mix-blend-mode: lighten;
-    pointer-events: none;
-    user-select: none;
-  }
-  .content {
-    position: relative;
-    z-index: 2;
+
+  /* ── TOPO: relógio ── */
+  .top {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 40px 20px 28px;
   }
   #hora {
-    font-size: clamp(2.5rem, 12vw, 7rem);
-    font-weight: normal;
+    font-size: clamp(2.8rem, 13vw, 7rem);
     letter-spacing: 4px;
     line-height: 1;
-    text-shadow: 0 0 30px rgba(255,255,255,0.2);
   }
   .progress-wrap {
-    width: clamp(200px, 50vw, 500px);
-    height: 6px;
+    width: clamp(200px, 55vw, 520px);
+    height: 5px;
     background: #222;
-    border-radius: 0;
-    margin: 28px 0 20px;
+    margin: 22px 0 16px;
     overflow: hidden;
   }
   #barra {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #444, #fff);
+    background: linear-gradient(90deg, #333, #fff);
     transition: width 1s linear;
   }
   #data {
-    font-size: clamp(0.45rem, 1.8vw, 0.8rem);
+    font-size: clamp(0.42rem, 1.6vw, 0.75rem);
     color: #555;
     letter-spacing: 3px;
     text-transform: uppercase;
   }
+
+  /* ── DIVISOR ── */
+  .divider {
+    width: 90%;
+    height: 1px;
+    background: #1e1e1e;
+    margin: 0 auto;
+  }
+
+  /* ── BAIXO: foto + jogo ── */
+  .bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(16px, 4vw, 48px);
+    padding: 24px 32px 32px;
+    width: 100%;
+    max-width: 860px;
+  }
+
+  /* foto */
+  .foto-wrap {
+    flex-shrink: 0;
+  }
+  .foto-wrap img {
+    height: clamp(160px, 28vh, 280px);
+    width: auto;
+    display: block;
+    border-radius: 4px;
+    filter: grayscale(10%);
+  }
+
+  /* card jogo */
+  .jogo-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 8px;
+  }
+  .jogo-label {
+    font-size: clamp(0.38rem, 1.2vw, 0.6rem);
+    color: #3a3a3a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .jogo-times {
+    font-size: clamp(0.7rem, 2.5vw, 1.2rem);
+    color: #fff;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .jogo-vs {
+    font-size: 0.55em;
+    color: #444;
+  }
+  .jogo-info {
+    font-size: clamp(0.35rem, 1.1vw, 0.55rem);
+    color: #444;
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+  .countdown {
+    font-size: clamp(0.65rem, 2.2vw, 1.05rem);
+    color: #1eff6a;
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+  .countdown span {
+    color: #0d7a33;
+    font-size: 0.7em;
+    margin-left: 4px;
+  }
 </style>
 </head>
 <body>
-  <img id="gio" src="https://raw.githubusercontent.com/gprdesign/relogio/main/gio.jpg" alt="">
-  <div class="content">
+
+  <div class="top">
     <div id="hora">00:00</div>
-    <div class="progress-wrap">
-      <div id="barra"></div>
-    </div>
+    <div class="progress-wrap"><div id="barra"></div></div>
     <div id="data">--</div>
   </div>
+
+  <div class="divider"></div>
+
+  <div class="bottom">
+    <div class="foto-wrap">
+      <img src="https://raw.githubusercontent.com/gprdesign/relogio/main/gio.jpg" alt="Gio">
+    </div>
+    <div class="jogo-card">
+      <div class="jogo-label">🇧🇷 próximo jogo</div>
+      <div class="jogo-times">
+        🇧🇷 BRA <span class="jogo-vs">VS</span> 🇭🇹 HAI
+      </div>
+      <div class="jogo-info">
+        SEX 19 JUN 2026<br>
+        21H30 • FILADELFIA
+      </div>
+      <div class="countdown" id="countdown">--:--:--</div>
+    </div>
+  </div>
+
   <script>
-    const dias = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
+    const dias  = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
     const meses = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+
+    // Brasil x Haiti: 19/06/2026 21:30 horário de Brasília (UTC-3)
+    const JOGO = new Date("2026-06-20T00:30:00Z"); // 21:30 BRT = 00:30 UTC+1 dia
+
+    function pad(n){ return String(n).padStart(2,"0"); }
+
     function atualizar() {
       const now = new Date();
-      const h = String(now.getHours()).padStart(2,"0");
-      const m = String(now.getMinutes()).padStart(2,"0");
-      const s = now.getSeconds();
-      document.getElementById("hora").textContent = h + ":" + m;
+
+      // Relógio
+      document.getElementById("hora").textContent = pad(now.getHours()) + ":" + pad(now.getMinutes());
       document.getElementById("data").textContent =
         dias[now.getDay()] + "  " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
-      document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
+      document.getElementById("barra").style.width = ((now.getSeconds() / 60) * 100) + "%";
+
+      // Countdown
+      const diff = JOGO - now;
+      if (diff <= 0) {
+        document.getElementById("countdown").textContent = "AO VIVO!";
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById("countdown").textContent =
+        (d > 0 ? d + "D " : "") + pad(h) + "H " + pad(m) + "M " + pad(s) + "S";
     }
+
     atualizar();
     setInterval(atualizar, 1000);
   </script>
