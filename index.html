@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relógio</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -13,34 +14,35 @@
     align-items: center;
     justify-content: center;
     height: 100dvh;
-    font-family: "Courier New", monospace;
+    font-family: "Press Start 2P", monospace;
     color: #fff;
   }
   #hora {
-    font-size: clamp(4rem, 20vw, 10rem);
-    font-weight: bold;
+    font-size: clamp(2.5rem, 12vw, 7rem);
+    font-weight: normal;
     letter-spacing: 4px;
     line-height: 1;
+    text-shadow: 0 0 20px rgba(255,255,255,0.3);
   }
   .progress-wrap {
     width: clamp(200px, 50vw, 500px);
-    height: 4px;
+    height: 6px;
     background: #222;
-    border-radius: 2px;
-    margin: 20px 0 14px;
+    border-radius: 0px;
+    margin: 28px 0 20px;
     overflow: hidden;
+    image-rendering: pixelated;
   }
   #barra {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #444, #fff);
-    border-radius: 2px;
+    background: linear-gradient(90deg, #555, #fff);
     transition: width 1s linear;
   }
   #data {
-    font-size: clamp(1rem, 4vw, 2rem);
-    color: #888;
-    letter-spacing: 2px;
+    font-size: clamp(0.5rem, 2vw, 0.85rem);
+    color: #666;
+    letter-spacing: 3px;
     text-transform: uppercase;
   }
 </style>
@@ -52,8 +54,8 @@
   </div>
   <div id="data">--</div>
   <script>
-    const dias = ["Domingo","Segunda","Terca","Quarta","Quinta","Sexta","Sabado"];
-    const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const dias = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
+    const meses = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
     function atualizar() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2,"0");
@@ -61,9 +63,8 @@
       const s = now.getSeconds();
       document.getElementById("hora").textContent = h + ":" + m;
       document.getElementById("data").textContent =
-        dias[now.getDay()] + ", " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
-      const pct = ((s) / 60) * 100;
-      document.getElementById("barra").style.width = pct + "%";
+        dias[now.getDay()] + "  " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
+      document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
     }
     atualizar();
     setInterval(atualizar, 1000);
