@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relógio</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+    font-family: "Courier New", monospace;
+    color: #fff;
+  }
+  #hora {
+    font-size: clamp(4rem, 20vw, 10rem);
+    font-weight: bold;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  #data {
+    font-size: clamp(1rem, 4vw, 2rem);
+    color: #888;
+    margin-top: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div id="hora">00:00</div>
+  <div id="data">--</div>
+  <script>
+    const dias = ["Domingo","Segunda","Terca","Quarta","Quinta","Sexta","Sabado"];
+    const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    function atualizar() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,"0");
+      const m = String(now.getMinutes()).padStart(2,"0");
+      document.getElementById("hora").textContent = h + ":" + m;
+      document.getElementById("data").textContent =
+        dias[now.getDay()] + ", " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
+    }
+    atualizar();
+    setInterval(atualizar, 1000);
+  </script>
+</body>
+</html>
