@@ -16,43 +16,65 @@
     height: 100dvh;
     font-family: "Press Start 2P", monospace;
     color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  #gio {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 85vh;
+    max-height: 600px;
+    opacity: 0.18;
+    mix-blend-mode: lighten;
+    pointer-events: none;
+    user-select: none;
+  }
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   #hora {
     font-size: clamp(2.5rem, 12vw, 7rem);
     font-weight: normal;
     letter-spacing: 4px;
     line-height: 1;
-    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+    text-shadow: 0 0 30px rgba(255,255,255,0.2);
   }
   .progress-wrap {
     width: clamp(200px, 50vw, 500px);
     height: 6px;
     background: #222;
-    border-radius: 0px;
+    border-radius: 0;
     margin: 28px 0 20px;
     overflow: hidden;
-    image-rendering: pixelated;
   }
   #barra {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #555, #fff);
+    background: linear-gradient(90deg, #444, #fff);
     transition: width 1s linear;
   }
   #data {
-    font-size: clamp(0.5rem, 2vw, 0.85rem);
-    color: #666;
+    font-size: clamp(0.45rem, 1.8vw, 0.8rem);
+    color: #555;
     letter-spacing: 3px;
     text-transform: uppercase;
   }
 </style>
 </head>
 <body>
-  <div id="hora">00:00</div>
-  <div class="progress-wrap">
-    <div id="barra"></div>
+  <img id="gio" src="https://raw.githubusercontent.com/gprdesign/relogio/main/gio.jpg" alt="">
+  <div class="content">
+    <div id="hora">00:00</div>
+    <div class="progress-wrap">
+      <div id="barra"></div>
+    </div>
+    <div id="data">--</div>
   </div>
-  <div id="data">--</div>
   <script>
     const dias = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
     const meses = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
