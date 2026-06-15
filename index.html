@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relógio</title>
-<!-- v5 -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,11 +32,12 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    outline: 1px solid rgba(255,255,255,0.5);
   }
 
   /* ── TOP: relógio ── */
   .top {
-    flex: 0 0 110px;
+    flex: 0 0 62px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,28 +47,53 @@
 
   #hora {
     font-family: "Press Start 2P", monospace;
-    font-size: 2.0rem;
+    font-size: 1.6rem;
     letter-spacing: 3px;
     line-height: 1;
   }
 
+  /* barra dupla: fundo animado + progresso real por cima */
   .progress-wrap {
+    position: relative;
     width: 200px;
     height: 3px;
     background: #1c1c1c;
-    margin: 8px 0 6px;
+    margin: 7px 0 5px;
     overflow: hidden;
   }
+
+  /* camada fundo: pulsa 0→100% a cada 1s, 25% opacidade */
+  .progress-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255,255,255,0.25);
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: pulse1s 1s linear infinite;
+  }
+
+  @keyframes pulse1s {
+    0%   { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+  }
+
+  /* camada real: progresso do minuto */
   #barra {
+    position: absolute;
+    top: 0; left: 0;
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #2a2a2a, #fff);
+    background: linear-gradient(90deg, #444, #fff);
     transition: width 1s linear;
+    z-index: 1;
   }
 
   #data {
     font-family: "Inter", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     color: #aaa;
     letter-spacing: 1.5px;
@@ -142,7 +167,7 @@
     overflow: hidden;
   }
 
-  /* ── COUNTDOWN — coluna direita verde Brasil ── */
+  /* ── COUNTDOWN ── */
   .jogo-right {
     flex: 0 0 110px;
     background: #e00000;
