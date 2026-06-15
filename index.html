@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relógio</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -68,7 +68,7 @@
   #data {
     font-family: "Inter", sans-serif;
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 600;
     color: #aaa;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -85,22 +85,23 @@
     flex: 1;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    padding: 0 12px;
-    gap: 10px;
+    align-items: stretch;
+    overflow: hidden;
   }
 
   .jogo-left {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 4px;
+    padding: 0 12px;
   }
 
   .jogo-label {
     font-family: "Inter", sans-serif;
     font-size: 9px;
-    font-weight: 500;
+    font-weight: 600;
     color: #aaa;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -119,21 +120,23 @@
 
   .jogo-vs {
     font-size: 11px;
-    font-weight: 400;
+    font-weight: 500;
     color: #aaa;
   }
 
   .jogo-info {
     font-family: "Inter", sans-serif;
     font-size: 10px;
-    font-weight: 400;
+    font-weight: 600;
     color: #aaa;
     letter-spacing: 0.3px;
     line-height: 1.6;
   }
 
+  /* ── COUNTDOWN — coluna direita verde Brasil ── */
   .jogo-right {
-    flex: 0 0 auto;
+    flex: 0 0 88px;
+    background: #009c3b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,10 +144,10 @@
 
   .countdown {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.46rem;
-    color: #1eff6a;
+    font-size: 0.52rem;
+    color: #fff;
     letter-spacing: 1px;
-    line-height: 1.9;
+    line-height: 2;
     text-align: center;
     white-space: pre;
   }
@@ -165,7 +168,7 @@
       <div class="jogo-left">
         <div class="jogo-label">Proximo Jogo — Brasil</div>
         <div class="jogo-times">BRA <span class="jogo-vs">vs</span> HAI</div>
-        <div class="jogo-info">Sex 19/06 · 21h30 BRT<br>Filadélfia</div>
+        <div class="jogo-info">Sex 19/06 · 21h30 BRT<br>Filadelfia</div>
       </div>
       <div class="jogo-right">
         <div class="countdown" id="countdown">--</div>
