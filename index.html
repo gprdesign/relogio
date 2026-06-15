@@ -47,14 +47,14 @@
   }
   #data {
     font-size: clamp(0.5rem, 2vw, 0.8rem);
-    color: #444;
+    color: #888;
     letter-spacing: 4px;
   }
 
   /* divisor */
   .divider { background: #1c1c1c; }
 
-  /* ══ METADE DE BAIXO: foto + jogo ══ */
+  /* ══ METADE DE BAIXO: jogo (largura total) ══ */
   .bottom {
     display: flex;
     flex-direction: row;
@@ -62,20 +62,7 @@
     overflow: hidden;
   }
 
-  /* foto ocupa metade da largura */
-  .foto-wrap {
-    flex: 0 0 48%;
-    overflow: hidden;
-  }
-  .foto-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-
-  /* card jogo na outra metade */
+  /* card jogo ocupa 100% */
   .jogo-card {
     flex: 1;
     display: flex;
@@ -83,11 +70,10 @@
     justify-content: center;
     gap: clamp(10px, 2.5vh, 22px);
     padding: clamp(16px, 4vw, 36px);
-    border-left: 1px solid #1c1c1c;
   }
   .jogo-label {
     font-size: clamp(0.4rem, 1.4vw, 0.65rem);
-    color: #333;
+    color: #888;
     letter-spacing: 3px;
   }
   .jogo-times {
@@ -100,11 +86,11 @@
   }
   .jogo-vs {
     font-size: 0.5em;
-    color: #333;
+    color: #888;
   }
   .jogo-info {
     font-size: clamp(0.4rem, 1.3vw, 0.6rem);
-    color: #3a3a3a;
+    color: #888;
     letter-spacing: 2px;
     line-height: 2.2;
   }
@@ -127,9 +113,6 @@
   <div class="divider"></div>
 
   <div class="bottom">
-    <div class="foto-wrap">
-      <img src="https://raw.githubusercontent.com/gprdesign/relogio/main/gio.jpg" alt="Gio craque">
-    </div>
     <div class="jogo-card">
       <div class="jogo-label">🇧🇷 PRÓXIMO JOGO</div>
       <div class="jogo-times">🇧🇷 BRA <span class="jogo-vs">VS</span> 🇭🇹 HAI</div>
@@ -139,20 +122,40 @@
   </div>
 
   <script>
-    const dias  = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
-    const meses = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
-    const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC next day
+    const DIAS  = ["DOMINGO","SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO"];
+    const MESES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+    const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC do dia 20
+
+    const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+      weekday: "long", day: "numeric", month: "numeric", year: "numeric",
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
+    });
 
     function pad(n){ return String(n).padStart(2,"0"); }
 
     function tick() {
       const now = new Date();
 
-      // Relógio
-      document.getElementById("hora").textContent = pad(now.getHours()) + ":" + pad(now.getMinutes());
+      // Extrair partes no fuso BRT
+      const partes = Object.fromEntries(
+        fmtPartes.formatToParts(now).map(p => [p.type, p.value])
+      );
+      const h   = partes.hour;
+      const m   = partes.minute;
+      const s   = parseInt(partes.second, 10);
+      const dia = parseInt(partes.day, 10);
+      const mes = parseInt(partes.month, 10) - 1;
+      const ano = parseInt(partes.year, 10);
+
+      // Dia da semana: reconstruir em UTC puro para getUTCDay()
+      const dtBRT = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
+      const diaSemana = DIAS[dtBRT.getUTCDay()];
+
+      document.getElementById("hora").textContent = h + ":" + m;
       document.getElementById("data").textContent =
-        dias[now.getDay()] + "  " + now.getDate() + " " + meses[now.getMonth()] + " " + now.getFullYear();
-      document.getElementById("barra").style.width = ((now.getSeconds() / 60) * 100) + "%";
+        diaSemana + "  " + pad(dia) + " " + MESES[mes] + " " + ano;
+      document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
 
       // Countdown
       const diff = JOGO - now;
@@ -160,13 +163,12 @@
         document.getElementById("countdown").textContent = "🔴 AO VIVO!";
         return;
       }
-      const d = Math.floor(diff / 86400000);
-      const h = Math.floor((diff % 86400000) / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
+      const dd = Math.floor(diff / 86400000);
+      const hh = Math.floor((diff % 86400000) / 3600000);
+      const mm = Math.floor((diff % 3600000) / 60000);
+      const ss = Math.floor((diff % 60000) / 1000);
       document.getElementById("countdown").textContent =
-        pad(d) + "D " + pad(h) + "H
-" + pad(m) + "M " + pad(s) + "S";
+        pad(dd) + "D " + pad(hh) + "H " + pad(mm) + "M " + pad(ss) + "S";
     }
 
     tick();
