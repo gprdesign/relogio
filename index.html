@@ -21,12 +21,12 @@
   }
 
   #card {
-    width: 400px;
-    height: 226px;
-    min-width: 400px;
-    min-height: 226px;
-    max-width: 400px;
-    max-height: 226px;
+    width: 300px;
+    height: 170px;
+    min-width: 300px;
+    min-height: 170px;
+    max-width: 300px;
+    max-height: 170px;
     background: #0d0d0d;
     color: #fff;
     display: flex;
@@ -36,26 +36,26 @@
 
   /* ── TOP: relógio ── */
   .top {
-    flex: 0 0 118px;
+    flex: 0 0 88px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
   #hora {
     font-family: "Press Start 2P", monospace;
-    font-size: 3.2rem;
-    letter-spacing: 4px;
+    font-size: 2.4rem;
+    letter-spacing: 3px;
     line-height: 1;
   }
 
   .progress-wrap {
-    width: 320px;
+    width: 240px;
     height: 3px;
     background: #1c1c1c;
-    margin: 10px 0 8px;
+    margin: 8px 0 6px;
     overflow: hidden;
   }
   #barra {
@@ -67,10 +67,10 @@
 
   #data {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 600;
     color: #888;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
   }
 
@@ -86,54 +86,52 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0 16px;
-    gap: 14px;
+    padding: 0 12px;
+    gap: 10px;
   }
 
-  /* coluna esquerda: label + times + info */
   .jogo-left {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
 
   .jogo-label {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 600;
     color: #888;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 
   .jogo-times {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: 1px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     line-height: 1;
   }
 
   .jogo-vs {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 400;
     color: #888;
   }
 
   .jogo-info {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 400;
     color: #888;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     line-height: 1.6;
   }
 
-  /* coluna direita: countdown */
   .jogo-right {
     flex: 0 0 auto;
     display: flex;
@@ -143,11 +141,12 @@
 
   .countdown {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.62rem;
+    font-size: 0.46rem;
     color: #1eff6a;
     letter-spacing: 1px;
-    line-height: 1.8;
+    line-height: 1.9;
     text-align: center;
+    white-space: pre;
   }
 </style>
 </head>
@@ -166,7 +165,7 @@
       <div class="jogo-left">
         <div class="jogo-label">🇧🇷 Próximo Jogo</div>
         <div class="jogo-times">🇧🇷 BRA <span class="jogo-vs">vs</span> 🇭🇹 HAI</div>
-        <div class="jogo-info">Sex 19/06/2026 · 21h30 Brasília · Filadélfia</div>
+        <div class="jogo-info">Sex 19/06 · 21h30 BRT<br>Filadélfia</div>
       </div>
       <div class="jogo-right">
         <div class="countdown" id="countdown">--</div>
@@ -178,7 +177,7 @@
   <script>
     const DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
     const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-    const JOGO  = new Date("2026-06-20T00:30:00Z"); // 21h30 BRT = 00h30 UTC dia 20
+    const JOGO  = new Date("2026-06-20T00:30:00Z");
 
     const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
@@ -210,7 +209,7 @@
 
       const diff = JOGO - now;
       if (diff <= 0) {
-        document.getElementById("countdown").textContent = "🔴 AO VIVO!";
+        document.getElementById("countdown").textContent = "🔴\nAO VIVO";
         return;
       }
       const dd = Math.floor(diff / 86400000);
@@ -218,7 +217,7 @@
       const mm = Math.floor((diff % 3600000)  / 60000);
       const ss = Math.floor((diff % 60000)    / 1000);
       document.getElementById("countdown").textContent =
-        pad(dd) + "D\n" + pad(hh) + "H  " + pad(mm) + "M\n" + pad(ss) + "S";
+        pad(dd) + "D " + pad(hh) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
     }
 
     tick();
