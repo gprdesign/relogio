@@ -14,12 +14,12 @@
     overflow: hidden;
   }
   #card {
-    width: 300px; height: 170px;
-    min-width: 300px; min-height: 170px;
-    max-width: 300px; max-height: 170px;
+    width: 300px;
     background: #0d0d0d; color: #fff;
     display: flex; flex-direction: column; overflow: hidden;
   }
+
+  /* ── TOP: relógio ── */
   .top {
     flex: 0 0 71px;
     display: flex; flex-direction: column;
@@ -53,44 +53,64 @@
     font-size: 10px; font-weight: 600; color: #aaa;
     letter-spacing: 1.5px; text-transform: uppercase;
   }
-  .divider { flex: 0 0 1px; background: #1c1c1c; }
-  .bottom {
-    flex: 1; display: flex; flex-direction: row;
-    align-items: stretch; overflow: hidden;
+
+  .divider { height: 1px; background: #1c1c1c; }
+  .divider-inner { height: 1px; background: #1c1c1c; }
+
+  /* ── LINHA DE JOGO ── */
+  .jogo-row {
+    display: flex; flex-direction: row;
+    align-items: stretch; height: 50px; overflow: hidden;
   }
+  /* quando só 1 jogo, row fica maior */
+  .jogo-row.single { height: 99px; }
+
   .jogo-left {
     flex: 1; min-width: 0; overflow: hidden;
     display: flex; flex-direction: column;
-    justify-content: center; gap: 4px; padding: 0 12px;
+    justify-content: center; gap: 3px; padding: 0 10px;
   }
   .jogo-label {
     font-family: "Inter", sans-serif;
-    font-size: 9px; font-weight: 600; color: #aaa;
-    letter-spacing: 1.5px; text-transform: uppercase;
+    font-size: 8px; font-weight: 600; color: #aaa;
+    letter-spacing: 1.2px; text-transform: uppercase;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .jogo-label.bra { color: #ffd700; }
+
   .jogo-times {
     font-family: "Inter", sans-serif;
-    font-size: 18px; font-weight: 700; letter-spacing: 0.5px;
-    display: flex; align-items: center; gap: 6px;
+    font-weight: 700; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 5px;
     line-height: 1; white-space: nowrap; overflow: hidden;
   }
-  .jogo-vs { font-size: 11px; font-weight: 500; color: #aaa; }
+  .jogo-row.single .jogo-times { font-size: 18px; }
+  .jogo-row:not(.single) .jogo-times { font-size: 15px; }
+
+  .jogo-vs { font-weight: 500; color: #aaa; }
+  .jogo-row.single .jogo-vs { font-size: 11px; }
+  .jogo-row:not(.single) .jogo-vs { font-size: 9px; }
+
   .jogo-info {
     font-family: "Inter", sans-serif;
-    font-size: 10px; font-weight: 600; color: #aaa;
-    letter-spacing: 0.3px; line-height: 1.6; overflow: hidden;
+    font-size: 9px; font-weight: 600; color: #aaa;
+    letter-spacing: 0.3px; overflow: hidden;
   }
+  /* no single exibe a hora */
+  .jogo-row:not(.single) .jogo-info { display: none; }
+
+  /* ── COUNTDOWN ── */
   .jogo-right {
-    flex: 0 0 110px; background: #e00000;
+    flex: 0 0 100px; background: #e00000;
     display: flex; align-items: center; justify-content: center;
   }
   .countdown {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.62rem; color: #fff;
-    letter-spacing: 1px; line-height: 2;
+    color: #fff; letter-spacing: 1px;
     text-align: center; white-space: pre;
   }
+  .jogo-row.single .countdown  { font-size: 0.62rem; line-height: 2; }
+  .jogo-row:not(.single) .countdown { font-size: 0.45rem; line-height: 1.8; }
 </style>
 </head>
 <body>
@@ -101,21 +121,13 @@
       <div id="data">--</div>
     </div>
     <div class="divider"></div>
-    <div class="bottom">
-      <div class="jogo-left">
-        <div class="jogo-label" id="jogo-label">Próximo Jogo — Copa 2026</div>
-        <div class="jogo-times" id="jogo-times">--- <span class="jogo-vs">vs</span> ---</div>
-        <div class="jogo-info" id="jogo-info">--</div>
-      </div>
-      <div class="jogo-right">
-        <div class="countdown" id="countdown">--</div>
-      </div>
-    </div>
+    <div id="jogos-container"></div>
   </div>
 
   <script>
     var DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
     var MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    var WINDOW_MS = 7200000; // 2h janela "ao vivo"
 
     var JOGOS = [{"utc":"2026-06-11T19:00:00Z","home":"MEX","away":"RSA"},{"utc":"2026-06-12T02:00:00Z","home":"KOR","away":"CZE"},{"utc":"2026-06-12T19:00:00Z","home":"CAN","away":"BIH"},{"utc":"2026-06-13T01:00:00Z","home":"USA","away":"PAR"},{"utc":"2026-06-13T19:00:00Z","home":"QAT","away":"SUI"},{"utc":"2026-06-13T22:00:00Z","home":"BRA","away":"MAR"},{"utc":"2026-06-14T01:00:00Z","home":"HAI","away":"SCO"},{"utc":"2026-06-14T04:00:00Z","home":"AUS","away":"TUR"},{"utc":"2026-06-14T17:00:00Z","home":"GER","away":"CUW"},{"utc":"2026-06-14T20:00:00Z","home":"NED","away":"JPN"},{"utc":"2026-06-14T23:00:00Z","home":"CIV","away":"ECU"},{"utc":"2026-06-15T02:00:00Z","home":"SWE","away":"TUN"},{"utc":"2026-06-15T16:00:00Z","home":"ESP","away":"CPV"},{"utc":"2026-06-15T19:00:00Z","home":"BEL","away":"EGY"},{"utc":"2026-06-15T22:00:00Z","home":"KSA","away":"URU"},{"utc":"2026-06-16T01:00:00Z","home":"IRN","away":"NZL"},{"utc":"2026-06-16T19:00:00Z","home":"FRA","away":"SEN"},{"utc":"2026-06-16T22:00:00Z","home":"IRQ","away":"NOR"},{"utc":"2026-06-17T01:00:00Z","home":"ARG","away":"ALG"},{"utc":"2026-06-17T04:00:00Z","home":"AUT","away":"JOR"},{"utc":"2026-06-17T17:00:00Z","home":"POR","away":"COD"},{"utc":"2026-06-17T20:00:00Z","home":"ENG","away":"CRO"},{"utc":"2026-06-17T23:00:00Z","home":"GHA","away":"PAN"},{"utc":"2026-06-18T02:00:00Z","home":"UZB","away":"COL"},{"utc":"2026-06-18T16:00:00Z","home":"CZE","away":"RSA"},{"utc":"2026-06-18T19:00:00Z","home":"SUI","away":"BIH"},{"utc":"2026-06-18T22:00:00Z","home":"CAN","away":"QAT"},{"utc":"2026-06-19T01:00:00Z","home":"MEX","away":"KOR"},{"utc":"2026-06-19T19:00:00Z","home":"USA","away":"AUS"},{"utc":"2026-06-19T22:00:00Z","home":"SCO","away":"MAR"},{"utc":"2026-06-20T00:30:00Z","home":"BRA","away":"HAI"},{"utc":"2026-06-20T03:00:00Z","home":"TUR","away":"PAR"},{"utc":"2026-06-20T17:00:00Z","home":"NED","away":"SWE"},{"utc":"2026-06-20T20:00:00Z","home":"GER","away":"CIV"},{"utc":"2026-06-21T00:00:00Z","home":"ECU","away":"CUW"},{"utc":"2026-06-21T04:00:00Z","home":"TUN","away":"JPN"},{"utc":"2026-06-21T16:00:00Z","home":"ESP","away":"KSA"},{"utc":"2026-06-21T19:00:00Z","home":"BEL","away":"IRN"},{"utc":"2026-06-21T22:00:00Z","home":"URU","away":"CPV"},{"utc":"2026-06-22T01:00:00Z","home":"NZL","away":"EGY"},{"utc":"2026-06-22T17:00:00Z","home":"ARG","away":"AUT"},{"utc":"2026-06-22T21:00:00Z","home":"FRA","away":"IRQ"},{"utc":"2026-06-23T00:00:00Z","home":"NOR","away":"SEN"},{"utc":"2026-06-23T03:00:00Z","home":"JOR","away":"ALG"},{"utc":"2026-06-23T17:00:00Z","home":"POR","away":"UZB"},{"utc":"2026-06-23T20:00:00Z","home":"ENG","away":"GHA"},{"utc":"2026-06-23T23:00:00Z","home":"PAN","away":"CRO"},{"utc":"2026-06-24T02:00:00Z","home":"COL","away":"COD"},{"utc":"2026-06-24T19:00:00Z","home":"SUI","away":"CAN"},{"utc":"2026-06-24T19:00:00Z","home":"BIH","away":"QAT"},{"utc":"2026-06-24T22:00:00Z","home":"MAR","away":"HAI"},{"utc":"2026-06-24T22:00:00Z","home":"SCO","away":"BRA"},{"utc":"2026-06-25T01:00:00Z","home":"CZE","away":"MEX"},{"utc":"2026-06-25T01:00:00Z","home":"RSA","away":"KOR"},{"utc":"2026-06-25T20:00:00Z","home":"ECU","away":"GER"},{"utc":"2026-06-25T20:00:00Z","home":"CUW","away":"CIV"},{"utc":"2026-06-25T23:00:00Z","home":"TUN","away":"NED"},{"utc":"2026-06-25T23:00:00Z","home":"JPN","away":"SWE"},{"utc":"2026-06-26T02:00:00Z","home":"TUR","away":"USA"},{"utc":"2026-06-26T02:00:00Z","home":"PAR","away":"AUS"},{"utc":"2026-06-26T19:00:00Z","home":"NOR","away":"FRA"},{"utc":"2026-06-26T19:00:00Z","home":"SEN","away":"IRQ"},{"utc":"2026-06-27T00:00:00Z","home":"URU","away":"ESP"},{"utc":"2026-06-27T00:00:00Z","home":"CPV","away":"KSA"},{"utc":"2026-06-27T03:00:00Z","home":"NZL","away":"BEL"},{"utc":"2026-06-27T03:00:00Z","home":"EGY","away":"IRN"},{"utc":"2026-06-27T21:00:00Z","home":"PAN","away":"ENG"},{"utc":"2026-06-27T21:00:00Z","home":"CRO","away":"GHA"},{"utc":"2026-06-27T23:30:00Z","home":"COL","away":"POR"},{"utc":"2026-06-27T23:30:00Z","home":"COD","away":"UZB"},{"utc":"2026-06-28T02:00:00Z","home":"JOR","away":"ARG"},{"utc":"2026-06-28T02:00:00Z","home":"ALG","away":"AUT"},{"utc":"2026-06-28T19:00:00Z","home":"RSA","away":"CAN"},{"utc":"2026-06-29T17:00:00Z","home":"BRA","away":"JPN"},{"utc":"2026-06-29T20:30:00Z","home":"GER","away":"???"},{"utc":"2026-06-30T01:00:00Z","home":"NED","away":"MAR"},{"utc":"2026-06-30T17:00:00Z","home":"CIV","away":"???"},{"utc":"2026-06-30T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-01T01:00:00Z","home":"MEX","away":"???"},{"utc":"2026-07-01T16:00:00Z","home":"???","away":"???"},{"utc":"2026-07-01T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-02T00:00:00Z","home":"USA","away":"BIH"},{"utc":"2026-07-02T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-02T23:00:00Z","home":"???","away":"???"},{"utc":"2026-07-03T03:00:00Z","home":"SUI","away":"???"},{"utc":"2026-07-03T18:00:00Z","home":"AUS","away":"???"},{"utc":"2026-07-03T22:00:00Z","home":"ARG","away":"???"},{"utc":"2026-07-04T01:30:00Z","home":"???","away":"???"},{"utc":"2026-07-04T17:00:00Z","home":"???","away":"???"},{"utc":"2026-07-04T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-05T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-06T00:00:00Z","home":"???","away":"???"},{"utc":"2026-07-06T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T00:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T16:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-09T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-10T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-11T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-12T01:00:00Z","home":"???","away":"???"},{"utc":"2026-07-14T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-15T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-18T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-19T19:00:00Z","home":"???","away":"???"}];
 
@@ -133,14 +145,58 @@
       return dia + " " + d + "/" + mes + " \u00b7 " + h + "h" + m + " BRT";
     }
 
-    function getProximoJogo() {
+    // Retorna o(s) próximo(s) jogo(s) a partir de agora
+    // Se houver simultâneos no mesmo horário, retorna todos
+    function getProximosJogos() {
       var agora = Date.now();
-      // Ordenados por data — pega o primeiro que ainda não terminou (janela 2h)
+      var proximo = null;
+
       for (var i = 0; i < JOGOS.length; i++) {
         var t = new Date(JOGOS[i].utc).getTime();
-        if (t + 7200000 > agora) return JOGOS[i];
+        if (t + WINDOW_MS > agora) {
+          proximo = JOGOS[i].utc;
+          break;
+        }
       }
-      return null;
+      if (!proximo) return [];
+
+      // Pega todos com o mesmo horário
+      return JOGOS.filter(function(j) { return j.utc === proximo; });
+    }
+
+    function makeCountdown(diff) {
+      if (diff <= 0) return "AO\nVIVO!";
+      var dd = Math.floor(diff / 86400000);
+      var hh = Math.floor((diff % 86400000) / 3600000);
+      var mm = Math.floor((diff % 3600000)  / 60000);
+      var ss = Math.floor((diff % 60000)    / 1000);
+      return pad(dd) + "D " + pad(hh) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
+    }
+
+    function renderJogos(jogos, now) {
+      var container = document.getElementById("jogos-container");
+      var isSingle  = jogos.length <= 1;
+
+      var html = "";
+      jogos.forEach(function(jogo, idx) {
+        var isBra = (jogo.home === "BRA" || jogo.away === "BRA");
+        var label = isBra ? "\uD83C\uDDE7\uD83C\uDDF7 BRASIL!" : "Copa 2026";
+        var diff  = new Date(jogo.utc).getTime() - now.getTime();
+        var cd    = makeCountdown(diff);
+
+        if (idx > 0) html += '<div class="divider-inner"></div>';
+
+        html += '<div class="jogo-row' + (isSingle ? ' single' : '') + '">';
+        html += '  <div class="jogo-left">';
+        html += '    <div class="jogo-label' + (isBra ? ' bra' : '') + '">' + label + '</div>';
+        html += '    <div class="jogo-times">' + jogo.home + ' <span class="jogo-vs">vs</span> ' + jogo.away + '</div>';
+        html += '    <div class="jogo-info">' + formatarDataBRT(jogo.utc) + '</div>';
+        html += '  </div>';
+        html += '  <div class="jogo-right"><div class="countdown">' + cd + '</div></div>';
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
     }
 
     var fmtPartes = new Intl.DateTimeFormat("pt-BR", {
@@ -148,6 +204,8 @@
       weekday: "long", day: "numeric", month: "numeric", year: "numeric",
       hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
     });
+
+    var lastJogosKey = "";
 
     function tick() {
       var now    = new Date();
@@ -169,40 +227,36 @@
         diaSemana + "  " + pad(dia) + " " + MESES[mes] + " " + ano;
       document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
 
-      var jogo = getProximoJogo();
+      var jogos = getProximosJogos();
 
-      if (!jogo) {
-        document.getElementById("jogo-label").textContent = "Copa 2026";
-        document.getElementById("jogo-times").innerHTML = '--- <span class="jogo-vs">vs</span> ---';
-        document.getElementById("jogo-info").textContent = "Fim dos jogos";
-        document.getElementById("countdown").textContent = "\u2014";
+      if (jogos.length === 0) {
+        document.getElementById("jogos-container").innerHTML =
+          '<div class="jogo-row single">' +
+          '<div class="jogo-left">' +
+          '<div class="jogo-label">Copa 2026</div>' +
+          '<div class="jogo-times">--- <span class="jogo-vs">vs</span> ---</div>' +
+          '<div class="jogo-info">Fim dos jogos</div>' +
+          '</div>' +
+          '<div class="jogo-right"><div class="countdown">\u2014</div></div>' +
+          '</div>';
         return;
       }
 
-      // Destaca se é Brasil
-      var isBra = (jogo.home === "BRA" || jogo.away === "BRA");
-      document.getElementById("jogo-label").textContent = isBra
-        ? "Próximo Jogo — \uD83C\uDDE7\uD83C\uDDF7 BRASIL!"
-        : "Próximo Jogo — Copa 2026";
-
-      document.getElementById("jogo-times").innerHTML =
-        jogo.home + ' <span class="jogo-vs">vs</span> ' + jogo.away;
-      document.getElementById("jogo-info").textContent = formatarDataBRT(jogo.utc);
-
-      var jogoTs = new Date(jogo.utc).getTime();
-      var diff   = jogoTs - now.getTime();
-
-      if (diff <= 0) {
-        document.getElementById("countdown").textContent = "AO\nVIVO!";
-        return;
+      // Só re-renderiza estrutura se mudou o conjunto de jogos
+      var key = jogos.map(function(j) { return j.utc + j.home + j.away; }).join("|");
+      if (key !== lastJogosKey) {
+        renderJogos(jogos, now);
+        lastJogosKey = key;
+      } else {
+        // Atualiza só os countdowns (performance)
+        var cds = document.querySelectorAll(".countdown");
+        jogos.forEach(function(jogo, idx) {
+          if (cds[idx]) {
+            var diff = new Date(jogo.utc).getTime() - now.getTime();
+            cds[idx].textContent = makeCountdown(diff);
+          }
+        });
       }
-
-      var dd = Math.floor(diff / 86400000);
-      var hh = Math.floor((diff % 86400000) / 3600000);
-      var mm = Math.floor((diff % 3600000)  / 60000);
-      var ss = Math.floor((diff % 60000)    / 1000);
-      document.getElementById("countdown").textContent =
-        pad(dd) + "D " + pad(hh) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
     }
 
     tick();
