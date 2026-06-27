@@ -103,7 +103,7 @@
     <div class="divider"></div>
     <div class="bottom">
       <div class="jogo-left">
-        <div class="jogo-label" id="jogo-label">Proximo Jogo — Brasil</div>
+        <div class="jogo-label" id="jogo-label">Próximo Jogo — Copa 2026</div>
         <div class="jogo-times" id="jogo-times">--- <span class="jogo-vs">vs</span> ---</div>
         <div class="jogo-info" id="jogo-info">--</div>
       </div>
@@ -114,36 +114,28 @@
   </div>
 
   <script>
-    const DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
-    const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    var DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
+    var MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 
-    // ── JOGOS DO BRASIL — Copa do Mundo 2026 ──
-    // Atualizar aqui conforme o chaveamento for sendo definido
-    const JOGOS = [
-      { utc: "2026-06-13T22:00:00Z", home: "BRA", away: "MAR" },
-      { utc: "2026-06-20T00:30:00Z", home: "BRA", away: "HAI" },
-      { utc: "2026-06-24T22:00:00Z", home: "SCO", away: "BRA" },
-      { utc: "2026-06-29T17:00:00Z", home: "BRA", away: "JAP" }
-      // Próximas fases serão adicionadas automaticamente via commit
-    ];
+    var JOGOS = [{"utc":"2026-06-11T19:00:00Z","home":"MEX","away":"RSA"},{"utc":"2026-06-12T02:00:00Z","home":"KOR","away":"CZE"},{"utc":"2026-06-12T19:00:00Z","home":"CAN","away":"BIH"},{"utc":"2026-06-13T01:00:00Z","home":"USA","away":"PAR"},{"utc":"2026-06-13T19:00:00Z","home":"QAT","away":"SUI"},{"utc":"2026-06-13T22:00:00Z","home":"BRA","away":"MAR"},{"utc":"2026-06-14T01:00:00Z","home":"HAI","away":"SCO"},{"utc":"2026-06-14T04:00:00Z","home":"AUS","away":"TUR"},{"utc":"2026-06-14T17:00:00Z","home":"GER","away":"CUW"},{"utc":"2026-06-14T20:00:00Z","home":"NED","away":"JPN"},{"utc":"2026-06-14T23:00:00Z","home":"CIV","away":"ECU"},{"utc":"2026-06-15T02:00:00Z","home":"SWE","away":"TUN"},{"utc":"2026-06-15T16:00:00Z","home":"ESP","away":"CPV"},{"utc":"2026-06-15T19:00:00Z","home":"BEL","away":"EGY"},{"utc":"2026-06-15T22:00:00Z","home":"KSA","away":"URU"},{"utc":"2026-06-16T01:00:00Z","home":"IRN","away":"NZL"},{"utc":"2026-06-16T19:00:00Z","home":"FRA","away":"SEN"},{"utc":"2026-06-16T22:00:00Z","home":"IRQ","away":"NOR"},{"utc":"2026-06-17T01:00:00Z","home":"ARG","away":"ALG"},{"utc":"2026-06-17T04:00:00Z","home":"AUT","away":"JOR"},{"utc":"2026-06-17T17:00:00Z","home":"POR","away":"COD"},{"utc":"2026-06-17T20:00:00Z","home":"ENG","away":"CRO"},{"utc":"2026-06-17T23:00:00Z","home":"GHA","away":"PAN"},{"utc":"2026-06-18T02:00:00Z","home":"UZB","away":"COL"},{"utc":"2026-06-18T16:00:00Z","home":"CZE","away":"RSA"},{"utc":"2026-06-18T19:00:00Z","home":"SUI","away":"BIH"},{"utc":"2026-06-18T22:00:00Z","home":"CAN","away":"QAT"},{"utc":"2026-06-19T01:00:00Z","home":"MEX","away":"KOR"},{"utc":"2026-06-19T19:00:00Z","home":"USA","away":"AUS"},{"utc":"2026-06-19T22:00:00Z","home":"SCO","away":"MAR"},{"utc":"2026-06-20T00:30:00Z","home":"BRA","away":"HAI"},{"utc":"2026-06-20T03:00:00Z","home":"TUR","away":"PAR"},{"utc":"2026-06-20T17:00:00Z","home":"NED","away":"SWE"},{"utc":"2026-06-20T20:00:00Z","home":"GER","away":"CIV"},{"utc":"2026-06-21T00:00:00Z","home":"ECU","away":"CUW"},{"utc":"2026-06-21T04:00:00Z","home":"TUN","away":"JPN"},{"utc":"2026-06-21T16:00:00Z","home":"ESP","away":"KSA"},{"utc":"2026-06-21T19:00:00Z","home":"BEL","away":"IRN"},{"utc":"2026-06-21T22:00:00Z","home":"URU","away":"CPV"},{"utc":"2026-06-22T01:00:00Z","home":"NZL","away":"EGY"},{"utc":"2026-06-22T17:00:00Z","home":"ARG","away":"AUT"},{"utc":"2026-06-22T21:00:00Z","home":"FRA","away":"IRQ"},{"utc":"2026-06-23T00:00:00Z","home":"NOR","away":"SEN"},{"utc":"2026-06-23T03:00:00Z","home":"JOR","away":"ALG"},{"utc":"2026-06-23T17:00:00Z","home":"POR","away":"UZB"},{"utc":"2026-06-23T20:00:00Z","home":"ENG","away":"GHA"},{"utc":"2026-06-23T23:00:00Z","home":"PAN","away":"CRO"},{"utc":"2026-06-24T02:00:00Z","home":"COL","away":"COD"},{"utc":"2026-06-24T19:00:00Z","home":"SUI","away":"CAN"},{"utc":"2026-06-24T19:00:00Z","home":"BIH","away":"QAT"},{"utc":"2026-06-24T22:00:00Z","home":"MAR","away":"HAI"},{"utc":"2026-06-24T22:00:00Z","home":"SCO","away":"BRA"},{"utc":"2026-06-25T01:00:00Z","home":"CZE","away":"MEX"},{"utc":"2026-06-25T01:00:00Z","home":"RSA","away":"KOR"},{"utc":"2026-06-25T20:00:00Z","home":"ECU","away":"GER"},{"utc":"2026-06-25T20:00:00Z","home":"CUW","away":"CIV"},{"utc":"2026-06-25T23:00:00Z","home":"TUN","away":"NED"},{"utc":"2026-06-25T23:00:00Z","home":"JPN","away":"SWE"},{"utc":"2026-06-26T02:00:00Z","home":"TUR","away":"USA"},{"utc":"2026-06-26T02:00:00Z","home":"PAR","away":"AUS"},{"utc":"2026-06-26T19:00:00Z","home":"NOR","away":"FRA"},{"utc":"2026-06-26T19:00:00Z","home":"SEN","away":"IRQ"},{"utc":"2026-06-27T00:00:00Z","home":"URU","away":"ESP"},{"utc":"2026-06-27T00:00:00Z","home":"CPV","away":"KSA"},{"utc":"2026-06-27T03:00:00Z","home":"NZL","away":"BEL"},{"utc":"2026-06-27T03:00:00Z","home":"EGY","away":"IRN"},{"utc":"2026-06-27T21:00:00Z","home":"PAN","away":"ENG"},{"utc":"2026-06-27T21:00:00Z","home":"CRO","away":"GHA"},{"utc":"2026-06-27T23:30:00Z","home":"COL","away":"POR"},{"utc":"2026-06-27T23:30:00Z","home":"COD","away":"UZB"},{"utc":"2026-06-28T02:00:00Z","home":"JOR","away":"ARG"},{"utc":"2026-06-28T02:00:00Z","home":"ALG","away":"AUT"},{"utc":"2026-06-28T19:00:00Z","home":"RSA","away":"CAN"},{"utc":"2026-06-29T17:00:00Z","home":"BRA","away":"JPN"},{"utc":"2026-06-29T20:30:00Z","home":"GER","away":"???"},{"utc":"2026-06-30T01:00:00Z","home":"NED","away":"MAR"},{"utc":"2026-06-30T17:00:00Z","home":"CIV","away":"???"},{"utc":"2026-06-30T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-01T01:00:00Z","home":"MEX","away":"???"},{"utc":"2026-07-01T16:00:00Z","home":"???","away":"???"},{"utc":"2026-07-01T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-02T00:00:00Z","home":"USA","away":"BIH"},{"utc":"2026-07-02T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-02T23:00:00Z","home":"???","away":"???"},{"utc":"2026-07-03T03:00:00Z","home":"SUI","away":"???"},{"utc":"2026-07-03T18:00:00Z","home":"AUS","away":"???"},{"utc":"2026-07-03T22:00:00Z","home":"ARG","away":"???"},{"utc":"2026-07-04T01:30:00Z","home":"???","away":"???"},{"utc":"2026-07-04T17:00:00Z","home":"???","away":"???"},{"utc":"2026-07-04T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-05T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-06T00:00:00Z","home":"???","away":"???"},{"utc":"2026-07-06T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T00:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T16:00:00Z","home":"???","away":"???"},{"utc":"2026-07-07T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-09T20:00:00Z","home":"???","away":"???"},{"utc":"2026-07-10T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-11T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-12T01:00:00Z","home":"???","away":"???"},{"utc":"2026-07-14T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-15T19:00:00Z","home":"???","away":"???"},{"utc":"2026-07-18T21:00:00Z","home":"???","away":"???"},{"utc":"2026-07-19T19:00:00Z","home":"???","away":"???"}];
 
     function pad(n) { return String(n).padStart(2, "0"); }
 
     function formatarDataBRT(utcStr) {
-      const dt  = new Date(utcStr);
-      const brt = new Date(dt.getTime() - 3 * 3600000);
-      const dias = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
-      const d    = pad(brt.getUTCDate());
-      const mes  = String(brt.getUTCMonth() + 1).padStart(2, "0");
-      const dia  = dias[brt.getUTCDay()];
-      const h    = pad(brt.getUTCHours());
-      const m    = pad(brt.getUTCMinutes());
+      var dt  = new Date(utcStr);
+      var brt = new Date(dt.getTime() - 3 * 3600000);
+      var dias = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
+      var d   = pad(brt.getUTCDate());
+      var mes = String(brt.getUTCMonth() + 1).padStart(2, "0");
+      var dia = dias[brt.getUTCDay()];
+      var h   = pad(brt.getUTCHours());
+      var m   = pad(brt.getUTCMinutes());
       return dia + " " + d + "/" + mes + " \u00b7 " + h + "h" + m + " BRT";
     }
 
-    function proximoJogo() {
-      const agora = Date.now();
-      // Considera "ao vivo" por 2h após o início
+    function getProximoJogo() {
+      var agora = Date.now();
+      // Ordenados por data — pega o primeiro que ainda não terminou (janela 2h)
       for (var i = 0; i < JOGOS.length; i++) {
         var t = new Date(JOGOS[i].utc).getTime();
         if (t + 7200000 > agora) return JOGOS[i];
@@ -151,40 +143,47 @@
       return null;
     }
 
-    const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
+    var fmtPartes = new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
       weekday: "long", day: "numeric", month: "numeric", year: "numeric",
       hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
     });
 
     function tick() {
-      const now    = new Date();
-      const partes = Object.fromEntries(
+      var now    = new Date();
+      var partes = Object.fromEntries(
         fmtPartes.formatToParts(now).map(function(p) { return [p.type, p.value]; })
       );
-      const h   = partes.hour;
-      const m   = partes.minute;
-      const s   = parseInt(partes.second, 10);
-      const dia = parseInt(partes.day, 10);
-      const mes = parseInt(partes.month, 10) - 1;
-      const ano = parseInt(partes.year, 10);
+      var h   = partes.hour;
+      var m   = partes.minute;
+      var s   = parseInt(partes.second, 10);
+      var dia = parseInt(partes.day, 10);
+      var mes = parseInt(partes.month, 10) - 1;
+      var ano = parseInt(partes.year, 10);
 
-      const dtBRT     = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
-      const diaSemana = DIAS[dtBRT.getUTCDay()];
+      var dtBRT     = new Date(Date.UTC(ano, mes, dia, 12, 0, 0));
+      var diaSemana = DIAS[dtBRT.getUTCDay()];
 
       document.getElementById("hora").textContent = h + ":" + m;
       document.getElementById("data").textContent =
         diaSemana + "  " + pad(dia) + " " + MESES[mes] + " " + ano;
       document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
 
-      var jogo = proximoJogo();
+      var jogo = getProximoJogo();
 
       if (!jogo) {
+        document.getElementById("jogo-label").textContent = "Copa 2026";
         document.getElementById("jogo-times").innerHTML = '--- <span class="jogo-vs">vs</span> ---';
-        document.getElementById("jogo-info").textContent = "Sem jogos agendados";
+        document.getElementById("jogo-info").textContent = "Fim dos jogos";
         document.getElementById("countdown").textContent = "\u2014";
         return;
       }
+
+      // Destaca se é Brasil
+      var isBra = (jogo.home === "BRA" || jogo.away === "BRA");
+      document.getElementById("jogo-label").textContent = isBra
+        ? "Próximo Jogo — \uD83C\uDDE7\uD83C\uDDF7 BRASIL!"
+        : "Próximo Jogo — Copa 2026";
 
       document.getElementById("jogo-times").innerHTML =
         jogo.home + ' <span class="jogo-vs">vs</span> ' + jogo.away;
