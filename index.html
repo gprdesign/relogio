@@ -7,288 +7,148 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+    width: 100%; height: 100%; margin: 0; padding: 0;
     background: #0d0d0d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-
   #card {
-    width: 300px;
-    height: 170px;
-    min-width: 300px;
-    min-height: 170px;
-    max-width: 300px;
-    max-height: 170px;
-    background: #0d0d0d;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    width: 300px; height: 170px;
+    min-width: 300px; min-height: 170px;
+    max-width: 300px; max-height: 170px;
+    background: #0d0d0d; color: #fff;
+    display: flex; flex-direction: column; overflow: hidden;
   }
-
   .top {
     flex: 0 0 71px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     padding: 10px 12px 0;
   }
-
   #hora {
     font-family: "Press Start 2P", monospace;
-    font-size: 1.85rem;
-    letter-spacing: 3px;
-    line-height: 1;
+    font-size: 1.85rem; letter-spacing: 3px; line-height: 1;
   }
-
   .progress-wrap {
-    position: relative;
-    width: 200px;
-    height: 3px;
-    background: #1c1c1c;
-    margin: 7px 0 5px;
-    overflow: hidden;
-    outline: 1px solid rgba(255,255,255,0.5);
-    outline-offset: 1px;
+    position: relative; width: 200px; height: 3px;
+    background: #1c1c1c; margin: 7px 0 5px; overflow: hidden;
+    outline: 1px solid rgba(255,255,255,0.5); outline-offset: 1px;
   }
-
   .progress-wrap::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%;
-    width: 100%;
+    content: ''; position: absolute; top: 0; left: 0;
+    height: 100%; width: 100%;
     background: rgba(255,255,255,0.25);
-    transform-origin: left center;
-    transform: scaleX(0);
+    transform-origin: left center; transform: scaleX(0);
     animation: pulse1s 1s linear infinite;
   }
-
-  @keyframes pulse1s {
-    0%   { transform: scaleX(0); }
-    100% { transform: scaleX(1); }
-  }
-
+  @keyframes pulse1s { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
   #barra {
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%;
-    width: 0%;
+    position: absolute; top: 0; left: 0; height: 100%; width: 0%;
     background: linear-gradient(90deg, #444, #fff);
-    transition: width 1s linear;
-    z-index: 1;
+    transition: width 1s linear; z-index: 1;
   }
-
   #data {
     font-family: "Inter", sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    color: #aaa;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    font-size: 10px; font-weight: 600; color: #aaa;
+    letter-spacing: 1.5px; text-transform: uppercase;
   }
-
-  .divider {
-    flex: 0 0 1px;
-    background: #1c1c1c;
-  }
-
+  .divider { flex: 0 0 1px; background: #1c1c1c; }
   .bottom {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    overflow: hidden;
+    flex: 1; display: flex; flex-direction: row;
+    align-items: stretch; overflow: hidden;
   }
-
   .jogo-left {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    padding: 0 12px;
+    flex: 1; min-width: 0; overflow: hidden;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 4px; padding: 0 12px;
   }
-
   .jogo-label {
     font-family: "Inter", sans-serif;
-    font-size: 9px;
-    font-weight: 600;
-    color: #aaa;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 9px; font-weight: 600; color: #aaa;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-
   .jogo-times {
     font-family: "Inter", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: 18px; font-weight: 700; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
+    line-height: 1; white-space: nowrap; overflow: hidden;
   }
-
-  .jogo-vs {
-    font-size: 11px;
-    font-weight: 500;
-    color: #aaa;
-  }
-
+  .jogo-vs { font-size: 11px; font-weight: 500; color: #aaa; }
   .jogo-info {
     font-family: "Inter", sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    color: #aaa;
-    letter-spacing: 0.3px;
-    line-height: 1.6;
-    overflow: hidden;
+    font-size: 10px; font-weight: 600; color: #aaa;
+    letter-spacing: 0.3px; line-height: 1.6; overflow: hidden;
   }
-
   .jogo-right {
-    flex: 0 0 110px;
-    background: #e00000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 110px; background: #e00000;
+    display: flex; align-items: center; justify-content: center;
   }
-
   .countdown {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.62rem;
-    color: #fff;
-    letter-spacing: 1px;
-    line-height: 2;
-    text-align: center;
-    white-space: pre;
+    font-size: 0.62rem; color: #fff;
+    letter-spacing: 1px; line-height: 2;
+    text-align: center; white-space: pre;
   }
 </style>
 </head>
 <body>
   <div id="card">
-
     <div class="top">
       <div id="hora">00:00</div>
       <div class="progress-wrap"><div id="barra"></div></div>
       <div id="data">--</div>
     </div>
-
     <div class="divider"></div>
-
     <div class="bottom">
       <div class="jogo-left">
         <div class="jogo-label" id="jogo-label">Proximo Jogo — Brasil</div>
         <div class="jogo-times" id="jogo-times">--- <span class="jogo-vs">vs</span> ---</div>
-        <div class="jogo-info" id="jogo-info">Carregando...</div>
+        <div class="jogo-info" id="jogo-info">--</div>
       </div>
       <div class="jogo-right">
         <div class="countdown" id="countdown">--</div>
       </div>
     </div>
-
   </div>
 
   <script>
     const DIAS  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
     const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-    const TOKEN = "c57116c6f5cf4d6cace9cd274079ac04";
-    const BRASIL_ID = 764;
 
-    let proximoJogo = null;
-    let lastFetch   = 0;
-    let buscando    = false;
+    // ── JOGOS DO BRASIL — Copa do Mundo 2026 ──
+    // Atualizar aqui conforme o chaveamento for sendo definido
+    const JOGOS = [
+      { utc: "2026-06-13T22:00:00Z", home: "BRA", away: "MAR" },
+      { utc: "2026-06-20T00:30:00Z", home: "BRA", away: "HAI" },
+      { utc: "2026-06-24T22:00:00Z", home: "SCO", away: "BRA" },
+      { utc: "2026-06-29T17:00:00Z", home: "BRA", away: "JAP" }
+      // Próximas fases serão adicionadas automaticamente via commit
+    ];
 
     function pad(n) { return String(n).padStart(2, "0"); }
-
-    function abrev(nome) {
-      const map = {
-        "Brazil":"BRA","Japan":"JAP","Morocco":"MAR","Haiti":"HAI",
-        "Scotland":"SCO","Argentina":"ARG","France":"FRA","Germany":"ALE",
-        "Spain":"ESP","Portugal":"POR","England":"ING","Uruguay":"URU",
-        "Colombia":"COL","Mexico":"MEX","USA":"EUA","United States":"EUA",
-        "Netherlands":"HOL","South Korea":"COR","Serbia":"SRB",
-        "Ecuador":"EQU","Chile":"CHI","Paraguay":"PAR","Bolivia":"BOL",
-        "Peru":"PER","Venezuela":"VEN","Panama":"PAN","Costa Rica":"CRC",
-        "Honduras":"HON","Jamaica":"JAM","Cuba":"CUB","Senegal":"SEN",
-        "Nigeria":"NIG","Ghana":"GHA","Cameroon":"CAM","Ivory Coast":"CIV",
-        "Egypt":"EGI","Algeria":"ALG","Tunisia":"TUN","Australia":"AUS",
-        "Iran":"IRA","Saudi Arabia":"SAR","Qatar":"QAT","Belgium":"BEL",
-        "Croatia":"CRO","Denmark":"DIN","Poland":"POL","Sweden":"SUE",
-        "Switzerland":"SUI","Turkey":"TUR","Ukraine":"UCR"
-      };
-      return map[nome] || nome.substring(0, 3).toUpperCase();
-    }
 
     function formatarDataBRT(utcStr) {
       const dt  = new Date(utcStr);
       const brt = new Date(dt.getTime() - 3 * 3600000);
-      const dias  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
-      const d   = pad(brt.getUTCDate());
-      const mes = String(brt.getUTCMonth() + 1).padStart(2, "0");
-      const diaNome = dias[brt.getUTCDay()];
-      const h   = pad(brt.getUTCHours());
-      const m   = pad(brt.getUTCMinutes());
-      return diaNome + " " + d + "/" + mes + " \u00b7 " + h + "h" + m + " BRT";
+      const dias = ["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
+      const d    = pad(brt.getUTCDate());
+      const mes  = String(brt.getUTCMonth() + 1).padStart(2, "0");
+      const dia  = dias[brt.getUTCDay()];
+      const h    = pad(brt.getUTCHours());
+      const m    = pad(brt.getUTCMinutes());
+      return dia + " " + d + "/" + mes + " \u00b7 " + h + "h" + m + " BRT";
     }
 
-    async function buscarProximoJogo() {
-      if (buscando) return;
-      buscando = true;
-      try {
-        const res = await fetch(
-          "https://api.football-data.org/v4/teams/" + BRASIL_ID + "/matches?status=SCHEDULED&limit=5",
-          { headers: { "X-Auth-Token": TOKEN } }
-        );
-        const data = await res.json();
-        const agora = Date.now();
-
-        const futuros = (data.matches || [])
-          .filter(function(m) { return new Date(m.utcDate).getTime() > agora; })
-          .sort(function(a, b) { return new Date(a.utcDate) - new Date(b.utcDate); });
-
-        if (futuros.length > 0) {
-          const jogo = futuros[0];
-          const home = jogo.homeTeam.shortName || jogo.homeTeam.name;
-          const away = jogo.awayTeam.shortName || jogo.awayTeam.name;
-
-          proximoJogo = {
-            data:      new Date(jogo.utcDate),
-            homeAbrev: abrev(home),
-            awayAbrev: abrev(away),
-            infoStr:   formatarDataBRT(jogo.utcDate)
-          };
-
-          document.getElementById("jogo-times").innerHTML =
-            proximoJogo.homeAbrev + ' <span class="jogo-vs">vs</span> ' + proximoJogo.awayAbrev;
-          document.getElementById("jogo-info").innerHTML = proximoJogo.infoStr;
-        } else {
-          proximoJogo = null;
-          document.getElementById("jogo-times").innerHTML = '--- <span class="jogo-vs">vs</span> ---';
-          document.getElementById("jogo-info").textContent = "Sem jogos agendados";
-          document.getElementById("countdown").textContent = "\u2014";
-        }
-      } catch(e) {
-        // silencioso
+    function proximoJogo() {
+      const agora = Date.now();
+      // Considera "ao vivo" por 2h após o início
+      for (var i = 0; i < JOGOS.length; i++) {
+        var t = new Date(JOGOS[i].utc).getTime();
+        if (t + 7200000 > agora) return JOGOS[i];
       }
-      lastFetch = Date.now();
-      buscando  = false;
+      return null;
     }
 
     const fmtPartes = new Intl.DateTimeFormat("pt-BR", {
@@ -317,36 +177,35 @@
         diaSemana + "  " + pad(dia) + " " + MESES[mes] + " " + ano;
       document.getElementById("barra").style.width = ((s / 60) * 100) + "%";
 
-      // Re-busca a cada 30 min
-      if (Date.now() - lastFetch > 30 * 60 * 1000) {
-        buscarProximoJogo();
+      var jogo = proximoJogo();
+
+      if (!jogo) {
+        document.getElementById("jogo-times").innerHTML = '--- <span class="jogo-vs">vs</span> ---';
+        document.getElementById("jogo-info").textContent = "Sem jogos agendados";
+        document.getElementById("countdown").textContent = "\u2014";
+        return;
       }
 
-      if (!proximoJogo) return;
+      document.getElementById("jogo-times").innerHTML =
+        jogo.home + ' <span class="jogo-vs">vs</span> ' + jogo.away;
+      document.getElementById("jogo-info").textContent = formatarDataBRT(jogo.utc);
 
-      const diff = proximoJogo.data - now;
+      var jogoTs = new Date(jogo.utc).getTime();
+      var diff   = jogoTs - now.getTime();
 
-      if (diff <= 0 && diff > -7200000) {
+      if (diff <= 0) {
         document.getElementById("countdown").textContent = "AO\nVIVO!";
         return;
       }
 
-      if (diff <= -7200000) {
-        lastFetch = 0;
-        proximoJogo = null;
-        buscarProximoJogo();
-        return;
-      }
-
-      const dd = Math.floor(diff / 86400000);
-      const hh = Math.floor((diff % 86400000) / 3600000);
-      const mm = Math.floor((diff % 3600000)  / 60000);
-      const ss = Math.floor((diff % 60000)    / 1000);
+      var dd = Math.floor(diff / 86400000);
+      var hh = Math.floor((diff % 86400000) / 3600000);
+      var mm = Math.floor((diff % 3600000)  / 60000);
+      var ss = Math.floor((diff % 60000)    / 1000);
       document.getElementById("countdown").textContent =
         pad(dd) + "D " + pad(hh) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
     }
 
-    buscarProximoJogo();
     tick();
     setInterval(tick, 1000);
   </script>
