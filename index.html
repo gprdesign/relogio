@@ -109,8 +109,8 @@
     color: #fff; letter-spacing: 1px;
     text-align: center; white-space: pre;
   }
-  .jogo-row.single .countdown  { font-size: 0.62rem; line-height: 2; }
-  .jogo-row:not(.single) .countdown { font-size: 0.45rem; line-height: 1.8; }
+  .jogo-row.single .countdown  { font-size: 0.85rem; line-height: 1; }
+  .jogo-row:not(.single) .countdown { font-size: 0.72rem; line-height: 1; }
 </style>
 </head>
 <body>
@@ -167,12 +167,12 @@
     var CORES = ["#e00000", "#7B2FBE", "#1565C0", "#1B7A3E"];
 
     function makeCountdown(diff) {
-      if (diff <= 0) return "AO\nVIVO!";
+      if (diff <= 0) return "AO VIVO!";
       var totalH = Math.floor(diff / 3600000);
       var mm     = Math.floor((diff % 3600000) / 60000);
       var ss     = Math.floor((diff % 60000)   / 1000);
-      if (totalH > 0) return pad(totalH) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
-      return pad(mm) + "M\n" + pad(ss) + "S";
+      if (totalH > 0) return pad(totalH) + ":" + pad(mm) + ":" + pad(ss);
+      return pad(mm) + ":" + pad(ss);
     }
 
     function renderJogos(jogos, now) {
