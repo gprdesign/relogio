@@ -54,16 +54,50 @@
     letter-spacing: 1.5px; text-transform: uppercase;
   }
 
-  .divider { height: 1px; background: #1c1c1c; }
-  .divider-inner { height: 1px; background: #1c1c1c; }
+  .divider       { height: 1px; background: #1c1c1c; }
+  .divider-inner { height: 1px; background: #222; }
 
-  /* ── LINHA DE JOGO ── */
+  /* ── LINHA HORÁRIO (só aparece quando há 2 jogos simultâneos) ── */
+  .horario-row {
+    display: flex; flex-direction: row;
+    align-items: stretch; height: 46px; overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    border: 3px solid #FFD600;
+  }
+  .horario-left {
+    flex: 1; min-width: 0; overflow: hidden;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 3px; padding: 0 10px;
+  }
+  .horario-label {
+    font-family: "Inter", sans-serif;
+    font-size: 8px; font-weight: 600; color: #aaa;
+    letter-spacing: 1.2px; text-transform: uppercase;
+  }
+  .horario-times {
+    font-family: "Inter", sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 5px;
+    line-height: 1; white-space: nowrap; overflow: hidden;
+  }
+  .horario-times .jogo-vs { font-size: 9px; font-weight: 500; color: #aaa; }
+  .horario-right {
+    flex: 0 0 90px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .horario-hora {
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.8rem; color: #FFD600;
+    letter-spacing: 1px; text-align: center;
+  }
+
+  /* ── LINHA COUNTDOWN ── */
   .jogo-row {
     display: flex; flex-direction: row;
-    align-items: stretch; height: 50px; overflow: hidden;
+    align-items: stretch; overflow: hidden;
   }
-  /* quando só 1 jogo, row fica maior */
   .jogo-row.single { height: 99px; }
+  .jogo-row.duplo  { height: 53px; }
 
   .jogo-left {
     flex: 1; min-width: 0; overflow: hidden;
@@ -77,7 +111,6 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .jogo-label.bra { color: #ffd700; }
-
   .jogo-times {
     font-family: "Inter", sans-serif;
     font-weight: 700; letter-spacing: 0.5px;
@@ -85,32 +118,34 @@
     line-height: 1; white-space: nowrap; overflow: hidden;
   }
   .jogo-row.single .jogo-times { font-size: 18px; }
-  .jogo-row:not(.single) .jogo-times { font-size: 15px; }
-
+  .jogo-row.duplo  .jogo-times { font-size: 15px; }
   .jogo-vs { font-weight: 500; color: #aaa; }
   .jogo-row.single .jogo-vs { font-size: 11px; }
-  .jogo-row:not(.single) .jogo-vs { font-size: 9px; }
-
+  .jogo-row.duplo  .jogo-vs  { font-size: 9px; }
   .jogo-info {
     font-family: "Inter", sans-serif;
     font-size: 9px; font-weight: 600; color: #aaa;
     letter-spacing: 0.3px; overflow: hidden;
   }
-  /* no single exibe a hora */
-  .jogo-row:not(.single) .jogo-info { display: none; }
 
   /* ── COUNTDOWN ── */
   .jogo-right {
     flex: 0 0 100px;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+  }
+  .cd-label {
+    font-family: "Inter", sans-serif;
+    font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.7);
+    letter-spacing: 1.5px; text-transform: uppercase;
   }
   .countdown {
     font-family: "Press Start 2P", monospace;
     color: #fff; letter-spacing: 1px;
-    text-align: center; white-space: pre;
+    text-align: center; line-height: 1;
   }
-  .jogo-row.single .countdown  { font-size: 0.85rem; line-height: 1; }
-  .jogo-row:not(.single) .countdown { font-size: 0.72rem; line-height: 1; }
+  .jogo-row.single .countdown { font-size: 0.78rem; }
+  .jogo-row.duplo  .countdown { font-size: 0.72rem; }
 </style>
 </head>
 <body>
@@ -164,40 +199,80 @@
       return JOGOS.filter(function(j) { return j.utc === proximo; });
     }
 
-    var CORES = ["#e00000", "#7B2FBE", "#1565C0", "#1B7A3E"];
-
     function makeCountdown(diff) {
       if (diff <= 0) return "AO VIVO!";
-      var totalH = Math.floor(diff / 3600000);
-      var mm     = Math.floor((diff % 3600000) / 60000);
-      var ss     = Math.floor((diff % 60000)   / 1000);
-      if (totalH > 0) return pad(totalH) + ":" + pad(mm) + ":" + pad(ss);
-      return pad(mm) + ":" + pad(ss);
+      var totalS = Math.floor(diff / 1000);
+      var dd = Math.floor(totalS / 86400);
+      var hh = Math.floor((totalS % 86400) / 3600);
+      var mm = Math.floor((totalS % 3600)  / 60);
+      var ss = totalS % 60;
+      if (dd > 0) return pad(dd) + "d " + pad(hh) + "hs";
+      if (hh > 0) return pad(hh) + "hs " + pad(mm) + "min " + pad(ss) + "s";
+      return pad(mm) + "min " + pad(ss) + "s";
+    }
+
+    function horasBRT(utcStr) {
+      var dt  = new Date(utcStr);
+      var brt = new Date(dt.getTime() - 3 * 3600000);
+      return pad(brt.getUTCHours()) + ":" + pad(brt.getUTCMinutes());
     }
 
     function renderJogos(jogos, now) {
       var container = document.getElementById("jogos-container");
-      var isSingle  = jogos.length <= 1;
+      var isDuplo   = jogos.length >= 2;
+      var html      = "";
 
-      var html = "";
-      jogos.forEach(function(jogo, idx) {
-        var isBra = (jogo.home === "BRA" || jogo.away === "BRA");
-        var label = isBra ? "\uD83C\uDDE7\uD83C\uDDF7 BRASIL!" : "Copa 2026";
-        var diff  = new Date(jogo.utc).getTime() - now.getTime();
-        var cd    = makeCountdown(diff);
+      if (isDuplo) {
+        // ── Linha de horário (compartilhada, fundo branco 5% + borda amarela) ──
+        var jogo0 = jogos[0];
+        var isBra0 = (jogo0.home === "BRA" || jogo0.away === "BRA");
+        html += '<div class="horario-row">';
+        html += '  <div class="horario-left">';
+        html += '    <div class="horario-label">' + (isBra0 ? "\uD83C\uDDE7\uD83C\uDDF7 BRASIL + " : "") + "Copa 2026 \u00b7 " + formatarDataBRT(jogo0.utc).split("\u00b7")[0].trim() + '</div>';
+        // Lista os 2 confrontos na mesma linha
+        var matchups = jogos.map(function(j) {
+          return '<span' + ((j.home==="BRA"||j.away==="BRA") ? ' style="color:#FFD600"' : '') + '>' + j.home + '</span>' +
+                 ' <span class="jogo-vs">vs</span> ' +
+                 '<span' + ((j.home==="BRA"||j.away==="BRA") ? ' style="color:#FFD600"' : '') + '>' + j.away + '</span>';
+        }).join(' <span style="color:#555;font-size:10px;margin:0 4px">|</span> ');
+        html += '    <div class="horario-times">' + matchups + '</div>';
+        html += '  </div>';
+        html += '  <div class="horario-right"><div class="horario-hora">' + horasBRT(jogo0.utc) + '\nBRT</div></div>';
+        html += '</div>';
+        html += '<div class="divider-inner"></div>';
 
-        if (idx > 0) html += '<div class="divider-inner"></div>';
+        // ── Linha countdown (única, com "faltam") ──
+        var diff = new Date(jogo0.utc).getTime() - now.getTime();
+        var cor  = "#e00000";
+        html += '<div class="jogo-row duplo">';
+        html += '  <div class="jogo-left">';
+        html += '    <div class="jogo-label">Próximo jogo simultâneo</div>';
+        html += '    <div class="jogo-times" style="font-size:12px;color:#aaa">2 jogos no mesmo horário</div>';
+        html += '  </div>';
+        html += '  <div class="jogo-right" style="background:' + cor + '">';
+        html += '    <div class="cd-label">faltam</div>';
+        html += '    <div class="countdown" id="cd-main">' + makeCountdown(diff) + '</div>';
+        html += '  </div>';
+        html += '</div>';
 
-        html += '<div class="jogo-row' + (isSingle ? ' single' : '') + '">';
+      } else {
+        // ── 1 jogo só ──
+        var jogo   = jogos[0];
+        var isBra  = (jogo.home === "BRA" || jogo.away === "BRA");
+        var label  = isBra ? "\uD83C\uDDE7\uD83C\uDDF7 BRASIL!" : "Copa 2026";
+        var diff   = new Date(jogo.utc).getTime() - now.getTime();
+        html += '<div class="jogo-row single">';
         html += '  <div class="jogo-left">';
         html += '    <div class="jogo-label' + (isBra ? ' bra' : '') + '">' + label + '</div>';
         html += '    <div class="jogo-times">' + jogo.home + ' <span class="jogo-vs">vs</span> ' + jogo.away + '</div>';
         html += '    <div class="jogo-info">' + formatarDataBRT(jogo.utc) + '</div>';
         html += '  </div>';
-        var cor = CORES[idx % CORES.length];
-        html += '  <div class="jogo-right" style="background:' + cor + '"><div class="countdown">' + cd + '</div></div>';
+        html += '  <div class="jogo-right" style="background:#e00000">';
+        html += '    <div class="cd-label">faltam</div>';
+        html += '    <div class="countdown" id="cd-main">' + makeCountdown(diff) + '</div>';
+        html += '  </div>';
         html += '</div>';
-      });
+      }
 
       container.innerHTML = html;
     }
@@ -251,14 +326,12 @@
         renderJogos(jogos, now);
         lastJogosKey = key;
       } else {
-        // Atualiza só os countdowns (performance)
-        var cds = document.querySelectorAll(".countdown");
-        jogos.forEach(function(jogo, idx) {
-          if (cds[idx]) {
-            var diff = new Date(jogo.utc).getTime() - now.getTime();
-            cds[idx].textContent = makeCountdown(diff);
-          }
-        });
+        // Atualiza só o countdown principal
+        var cd = document.getElementById("cd-main");
+        if (cd) {
+          var diff = new Date(jogos[0].utc).getTime() - now.getTime();
+          cd.textContent = makeCountdown(diff);
+        }
       }
     }
 
