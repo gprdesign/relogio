@@ -171,7 +171,8 @@
       var totalH = Math.floor(diff / 3600000);
       var mm     = Math.floor((diff % 3600000) / 60000);
       var ss     = Math.floor((diff % 60000)   / 1000);
-      return pad(totalH) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
+      if (totalH > 0) return pad(totalH) + "H\n" + pad(mm) + "M " + pad(ss) + "S";
+      return pad(mm) + "M\n" + pad(ss) + "S";
     }
 
     function renderJogos(jogos, now) {
